@@ -1,4 +1,6 @@
-package com.codurance.training.tasks;
+package com.codurance.training.tasks.usecase;
+
+import com.codurance.training.tasks.entity.Task;
 
 import java.io.BufferedReader;
 import java.io.IOException;
