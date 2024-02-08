@@ -1,36 +1,38 @@
 package com.codurance.training.tasks.usecase;
 
 import com.codurance.training.tasks.entity.Task;
+import com.codurance.training.tasks.entity.TaskList;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class TaskList implements Runnable {
+public final class TaskListRunner implements Runnable {
     private static final String QUIT = "quit";
 
-    private final Map<String, List<Task>> tasks = new LinkedHashMap<>();
+    private final TaskList tasks = new TaskList(new ArrayList<>());
     private final BufferedReader in;
     private final PrintWriter out;
 
     private long lastId = 0;
 
+    // Main Function
     public static void main(String[] args) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(System.out);
-        new TaskList(in, out).run();
+        new TaskListRunner(in, out).run();
     }
 
-    public TaskList(BufferedReader reader, PrintWriter writer) {
+    public TaskListRunner(BufferedReader reader, PrintWriter writer) {
         this.in = reader;
         this.out = writer;
     }
 
+    // Thread
     public void run() {
         while (true) {
             out.print("> ");
@@ -73,6 +75,7 @@ public final class TaskList implements Runnable {
         }
     }
 
+    // command
     private void show() {
         for (Map.Entry<String, List<Task>> project : tasks.entrySet()) {
             out.println(project.getKey());
@@ -83,6 +86,7 @@ public final class TaskList implements Runnable {
         }
     }
 
+    // command
     private void add(String commandLine) {
         String[] subcommandRest = commandLine.split(" ", 2);
         String subcommand = subcommandRest[0];
@@ -95,7 +99,7 @@ public final class TaskList implements Runnable {
     }
 
     private void addProject(String name) {
-        tasks.put(name, new ArrayList<Task>());
+        tasks.put(name, new ArrayList<>());
     }
 
     private void addTask(String project, String description) {
@@ -108,10 +112,12 @@ public final class TaskList implements Runnable {
         projectTasks.add(new Task(nextId(), description, false));
     }
 
+    // command
     private void check(String idString) {
         setDone(idString, true);
     }
 
+    //command
     private void uncheck(String idString) {
         setDone(idString, false);
     }
@@ -130,6 +136,7 @@ public final class TaskList implements Runnable {
         out.println();
     }
 
+    //command
     private void help() {
         out.println("Commands:");
         out.println("  show");
@@ -140,6 +147,7 @@ public final class TaskList implements Runnable {
         out.println();
     }
 
+    //command
     private void error(String command) {
         out.printf("I don't know what the command \"%s\" is.", command);
         out.println();
