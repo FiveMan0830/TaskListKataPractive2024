@@ -1,5 +1,6 @@
 package com.codurance.training.tasks.usecase;
 
+import com.codurance.training.tasks.entity.Command;
 import com.codurance.training.tasks.entity.Task;
 import com.codurance.training.tasks.entity.TaskList;
 
@@ -58,19 +59,19 @@ public final class TaskListRunner implements Runnable {
                 show();
                 break;
             case "add":
-                add(commandRest[1]);
+                add(Command.of(commandRest[1]));
                 break;
             case "check":
-                check(commandRest[1]);
+                check(Command.of(commandRest[1]));
                 break;
             case "uncheck":
-                uncheck(commandRest[1]);
+                uncheck(Command.of(commandRest[1]));
                 break;
             case "help":
                 help();
                 break;
             default:
-                error(command);
+                error(Command.of(command));
                 break;
         }
     }
@@ -87,8 +88,8 @@ public final class TaskListRunner implements Runnable {
     }
 
     // command
-    private void add(String commandLine) {
-        String[] subcommandRest = commandLine.split(" ", 2);
+    private void add(Command command) {
+        String[] subcommandRest = command.split(" ", 2);
         String subcommand = subcommandRest[0];
         if (subcommand.equals("project")) {
             addProject(subcommandRest[1]);
@@ -113,13 +114,13 @@ public final class TaskListRunner implements Runnable {
     }
 
     // command
-    private void check(String idString) {
-        setDone(idString, true);
+    private void check(Command command) {
+        setDone(command.getCommand(), true);
     }
 
     //command
-    private void uncheck(String idString) {
-        setDone(idString, false);
+    private void uncheck(Command command) {
+        setDone(command.getCommand(), false);
     }
 
     private void setDone(String idString, boolean done) {
@@ -148,8 +149,8 @@ public final class TaskListRunner implements Runnable {
     }
 
     //command
-    private void error(String command) {
-        out.printf("I don't know what the command \"%s\" is.", command);
+    private void error(Command command) {
+        out.printf("I don't know what the command \"%s\" is.", command.getCommand());
         out.println();
     }
 
