@@ -3,16 +3,14 @@ package com.codurance.training.tasks.usecase.port.in;
 import com.codurance.training.tasks.entity.Project;
 import com.codurance.training.tasks.usecase.port.out.ProjectRepository;
 
-import java.util.List;
-
-public class ShowTaskUseCase {
+public class AddProjectUseCase {
     private final ProjectRepository projectRepository;
 
-    public ShowTaskUseCase(ProjectRepository projectRepository) {
+    public AddProjectUseCase(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
 
-    public List<Project> execute() {
-        return projectRepository.findAll();
+    public void execute(String name) {
+        projectRepository.save(new Project(name));
     }
 }

@@ -1,6 +1,6 @@
 package com.codurance.training.tasks.entity;
 
-public final class Task {
+public final class Task implements Comparable<Task> {
     private final long id;
     private final String description;
     private boolean done;
@@ -25,5 +25,10 @@ public final class Task {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    @Override
+    public int compareTo(Task o) {
+        return Long.compare(id, o.getId());
     }
 }
