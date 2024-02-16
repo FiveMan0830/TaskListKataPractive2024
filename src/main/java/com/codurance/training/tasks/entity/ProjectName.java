@@ -10,4 +10,8 @@ public class ProjectName {
     public String getName() {
         return name;
     }
+
+    public static ProjectName of(String str) {
+        return new ProjectName(str);
+    }
 }

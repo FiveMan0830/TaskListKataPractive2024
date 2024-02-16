@@ -7,7 +7,11 @@ public class TaskDescription {
         this.description = description;
     }
 
-    public String getDescription() {
+    public String value() {
         return description;
+    }
+
+    public static TaskDescription of(String description) {
+        return new TaskDescription(description);
     }
 }

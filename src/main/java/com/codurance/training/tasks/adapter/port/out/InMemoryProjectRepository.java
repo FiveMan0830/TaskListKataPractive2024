@@ -1,56 +1,81 @@
 package com.codurance.training.tasks.adapter.port.out;
 
-import com.codurance.training.tasks.entity.Project;
-import com.codurance.training.tasks.entity.Task;
-import com.codurance.training.tasks.entity.TaskId;
-import com.codurance.training.tasks.usecase.port.out.ProjectRepository;
+import com.codurance.training.tasks.framework.ProjectStore;
+import com.codurance.training.tasks.framework.TaskStore;
+import com.codurance.training.tasks.usecase.port.out.*;
+import com.codurance.training.tasks.usecase.port.out.repository.ProjectRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryProjectRepository implements ProjectRepository {
-    List<Project> projectList = new ArrayList<>();
+    private final ProjectStore projectStore;
+    private final TaskStore taskStore;
 
-    public void save(Project data) {
-        Iterator it = projectList.iterator();
-        while(it.hasNext()) {
-            Project project = (Project) it.next();
-            if(project.getProjectName().equals(data.getProjectName()))
-                it.remove();
+    public InMemoryProjectRepository(ProjectStore projectStore, TaskStore taskStore) {
+        this.projectStore = projectStore;
+        this.taskStore = taskStore;
+    }
+
+    public void save(ProjectData data) {
+        projectStore.save(new ProjectPO(
+                data.getProjectName().value(),
+                data.getProjectTasks().stream().map(taskData -> taskData.getId().value()).collect(Collectors.toList())
+        ));
+        taskStore.save(data.getProjectTasks().stream().map(task -> new TaskPO(
+                task.getId().value(),
+                task.getDescription().value(),
+                task.getStatus().equals(TaskStatusData.Checked))).collect(Collectors.toList()));
+    }
+
+    public void save(TaskData task) {
+        taskStore.save(new TaskPO(
+                task.getId().value(),
+                task.getDescription().value(),
+                task.getStatus().equals(TaskStatusData.Checked)
+        ));
+    }
+
+    public Optional<TaskData> find(int id){
+        Optional<TaskPO> taskPO = taskStore.find(id);
+        if(!taskPO.isPresent()) return Optional.empty();
+        TaskPO task = taskPO.get();
+        return Optional.of(new TaskData(
+                TaskIdData.of(task.getId()),
+                TaskDescriptionData.of(task.getDescription()),
+                task.isCheck() ? TaskStatusData.Checked : TaskStatusData.Unchecked
+        ));
+    }
+
+    public Optional<ProjectData> find(String projectName) {
+        Optional<ProjectPO> projectPO = projectStore.find(projectName);
+        if(!projectPO.isPresent()) return Optional.empty();
+        ProjectPO project = projectPO.get();
+
+        return Optional.of(new ProjectData(
+                ProjectNameData.of(projectName),
+                getTasks(project.getTaskIdList())
+        ));
+    }
+
+    public List<ProjectData> findAll() {
+        List<ProjectData> result = new ArrayList<>();
+        for(ProjectPO po : projectStore.findAll()) {
+            result.add(new ProjectData(
+                    ProjectNameData.of(po.getName()),
+                    getTasks(po.getTaskIdList())
+            ));
+        }
+        return result;
+    }
+
+    private Set<TaskData> getTasks(List<Long> ids) {
+        Set<TaskData> projectTasks = new HashSet<>();
+
+        for(Long id : ids) {
+            find(id.intValue()).ifPresent(projectTasks::add);
         }
 
-        projectList.add(data);
-    }
-
-    @Override
-    public void save(Task task) {
-        for(Project project : projectList) {
-            if(project.getProjectTasks().stream().anyMatch(t -> t.getId() == task.getId())){
-                project.add(task);
-                return;
-            }
-        }
-    }
-
-    @Override
-    public Optional<Task> find(int id){
-        return getAllTasks().stream().filter(task -> Objects.equals(task.getId(), TaskId.of(id))).findFirst();
-    }
-
-    @Override
-    public Optional<Project> find(String projectName) {
-        return projectList.stream().filter(project -> project.getProjectName().getName().equals(projectName)).findFirst();
-    }
-
-    @Override
-    public List<Project> findAll() {
-        return projectList;
-    }
-
-    private List<Task> getAllTasks() {
-        List<Task> tasks = new ArrayList<>();
-        for(Project project : projectList) {
-            tasks.addAll(project.getProjectTasks());
-        }
-        return tasks;
+        return projectTasks;
     }
 }

@@ -2,7 +2,8 @@ package com.codurance.training.tasks.usecase.port.in.task.add;
 
 import com.codurance.training.tasks.entity.*;
 import com.codurance.training.tasks.usecase.ProjectNotFoundException;
-import com.codurance.training.tasks.usecase.port.out.ProjectRepository;
+import com.codurance.training.tasks.usecase.port.out.ProjectDataMapper;
+import com.codurance.training.tasks.usecase.port.out.repository.ProjectRepository;
 
 import static java.lang.String.format;
 
@@ -16,7 +17,8 @@ public class AddTaskUseCase {
     public void execute(String projectName, String description, long id) {
         if(!projectRepository.find(projectName).isPresent())
             throw new ProjectNotFoundException(format(ProjectNotFoundException.PROJECT_NOT_FOUND, projectName));
-        Project project = projectRepository.find(projectName).get();
+
+        Project project = ProjectDataMapper.toDomain(projectRepository.find(projectName).get());
 
         Task task = new Task(
                 new TaskId(id),
@@ -25,6 +27,6 @@ public class AddTaskUseCase {
         );
         project.add(task);
 
-        projectRepository.save(project);
+        projectRepository.save(ProjectDataMapper.toData(project));
     }
 }

@@ -1,16 +1,15 @@
 package com.codurance.training.tasks.adapter.port.in;
 
-import com.codurance.training.tasks.entity.Project;
-import com.codurance.training.tasks.entity.Task;
-import com.codurance.training.tasks.entity.TaskStatus;
 import com.codurance.training.tasks.usecase.ProjectNotFoundException;
 import com.codurance.training.tasks.usecase.TaskNotFoundException;
 import com.codurance.training.tasks.usecase.port.in.project.add.AddProjectUseCase;
-import com.codurance.training.tasks.usecase.port.in.project.show.FindAllProjectUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.check.CheckTaskUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.check.UncheckTaskUseCase;
-import com.codurance.training.tasks.usecase.port.out.ProjectRepository;
+import com.codurance.training.tasks.usecase.port.out.ProjectData;
+import com.codurance.training.tasks.usecase.port.out.TaskData;
+import com.codurance.training.tasks.usecase.port.out.TaskStatusData;
+import com.codurance.training.tasks.usecase.port.out.repository.ProjectRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,8 +21,8 @@ public class TaskCommandController implements Runnable {
     private final AddProjectUseCase addProjectUseCase;
     private final AddTaskUseCase addTaskUseCase;
     private final CheckTaskUseCase checkTaskUseCase;
-    private final FindAllProjectUseCase findAllProjectUseCase;
     private final UncheckTaskUseCase uncheckTaskUseCase;
+    private final ProjectRepository projectRepository;
     private final BufferedReader in;
     private final PrintWriter out;
 
@@ -31,9 +30,9 @@ public class TaskCommandController implements Runnable {
     public TaskCommandController(ProjectRepository projectRepository, BufferedReader in, PrintWriter out) {
         addProjectUseCase = new AddProjectUseCase(projectRepository);
         addTaskUseCase = new AddTaskUseCase(projectRepository);
-        findAllProjectUseCase = new FindAllProjectUseCase(projectRepository);
         checkTaskUseCase = new CheckTaskUseCase(projectRepository);
         uncheckTaskUseCase = new UncheckTaskUseCase(projectRepository);
+        this.projectRepository = projectRepository;
         this.in = in;
         this.out = out;
     }
@@ -71,11 +70,12 @@ public class TaskCommandController implements Runnable {
     }
 
     private void show() {
-        List<Project> projectList = findAllProjectUseCase.execute();
-        for (Project project : projectList) {
-            out.println(project.getProjectName().getName());
-            for (Task task : project.getProjectTasks()) {
-                out.printf("    [%c] %d: %s%n", (task.getStatus().equals(TaskStatus.Checked) ? 'x' : ' '), task.getId().getId(), task.getDescription().getDescription());
+        List<ProjectData> projectList = projectRepository.findAll();
+        for (ProjectData project : projectList) {
+            out.println(project.getProjectName().value());
+            List<TaskData> taskDataList = project.getProjectTasks();
+            for (TaskData task : taskDataList) {
+                out.printf("    [%c] %d: %s%n", (task.getStatus().equals(TaskStatusData.Checked) ? 'x' : ' '), task.getId().value(), task.getDescription().value());
             }
             out.println();
         }

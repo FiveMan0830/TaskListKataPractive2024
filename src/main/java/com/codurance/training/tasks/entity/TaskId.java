@@ -7,11 +7,15 @@ public class TaskId {
         this.id = id;
     }
 
-    public long getId() {
+    public long value() {
         return id;
     }
 
     public static TaskId of(int id) {
+        return new TaskId(id);
+    }
+
+    public static TaskId of(long id) {
         return new TaskId(id);
     }
 
@@ -20,6 +24,6 @@ public class TaskId {
         if(o == this) return true;
         if(!(o instanceof TaskId)) return false;
         TaskId t = (TaskId) o;
-        return id == t.getId();
+        return id == t.value();
     }
 }

@@ -1,33 +1,33 @@
-package com.codurance.training.tasks.entity;
+package com.codurance.training.tasks.usecase.port.out;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Project {
-    private final ProjectName projectName;
-    private final Set<Task> projectTasks;
+public class ProjectData {
+    private final ProjectNameData projectName;
+    private final Set<TaskData> projectTasks;
 
-    public Project(ProjectName projectName) {
+    public ProjectData(ProjectNameData projectName) {
         this.projectName = projectName;
         this.projectTasks = new HashSet<>();
     }
 
-    public Project(ProjectName projectName, Set<Task> projectTasks) {
+    public ProjectData(ProjectNameData projectName, Set<TaskData> projectTasks) {
         this.projectName = projectName;
         this.projectTasks = projectTasks;
     }
 
-    public ProjectName getProjectName() {
+    public ProjectNameData getProjectName() {
         return projectName;
     }
 
-    public List<Task> getProjectTasks() {
+    public List<TaskData> getProjectTasks() {
         return projectTasks.stream().sorted().collect(Collectors.toList());
     }
 
-    public void add(Task task) {
+    public void add(TaskData task) {
         projectTasks.add(task);
     }
 }

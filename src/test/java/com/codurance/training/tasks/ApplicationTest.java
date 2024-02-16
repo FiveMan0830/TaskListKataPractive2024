@@ -6,9 +6,12 @@ import java.io.InputStreamReader;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 import com.codurance.training.tasks.adapter.port.in.TaskCommandController;
 import com.codurance.training.tasks.adapter.port.out.InMemoryProjectRepository;
+import com.codurance.training.tasks.framework.ProjectStore;
+import com.codurance.training.tasks.framework.TaskStore;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +33,11 @@ public final class ApplicationTest {
     public ApplicationTest() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(new PipedInputStream(inStream)));
         PrintWriter out = new PrintWriter(new PipedOutputStream(outStream), true);
-        TaskCommandController taskCommandController = new TaskCommandController(new InMemoryProjectRepository(), in, out);
+        InMemoryProjectRepository repository = new InMemoryProjectRepository(
+                new ProjectStore(new HashMap<>()),
+                new TaskStore(new HashMap<>())
+        );
+        TaskCommandController taskCommandController = new TaskCommandController(repository, in, out);
         applicationThread = new Thread(taskCommandController);
     }
 
@@ -85,10 +92,6 @@ public final class ApplicationTest {
 
         execute("show");
         readLines(
-                "secrets",
-                "    [x] 1: Eat more donuts.",
-                "    [ ] 2: Destroy all humans.",
-                "",
                 "training",
                 "    [x] 3: Four Elements of Simple Design",
                 "    [ ] 4: SOLID",
@@ -96,6 +99,10 @@ public final class ApplicationTest {
                 "    [x] 6: Primitive Obsession",
                 "    [ ] 7: Outside-In TDD",
                 "    [ ] 8: Interaction-Driven Design",
+                "",
+                "secrets",
+                "    [x] 1: Eat more donuts.",
+                "    [ ] 2: Destroy all humans.",
                 ""
         );
 

@@ -2,7 +2,8 @@ package com.codurance.training.tasks.usecase.port.in.project.add;
 
 import com.codurance.training.tasks.entity.Project;
 import com.codurance.training.tasks.entity.ProjectName;
-import com.codurance.training.tasks.usecase.port.out.ProjectRepository;
+import com.codurance.training.tasks.usecase.port.out.ProjectDataMapper;
+import com.codurance.training.tasks.usecase.port.out.repository.ProjectRepository;
 
 public class AddProjectUseCase {
     private final ProjectRepository projectRepository;
@@ -14,6 +15,6 @@ public class AddProjectUseCase {
     public void execute(String name) {
         Project project = new Project(new ProjectName(name));
 
-        projectRepository.save(project);
+        projectRepository.save(ProjectDataMapper.toData(project));
     }
 }
