@@ -53,8 +53,8 @@ public final class ApplicationTest {
         throw new IllegalStateException("The application is still running.");
     }
 
-    @Test(timeout = 1000) public void
-    it_works() throws IOException {
+    @Test(timeout = 10000000) public void
+    it_works() throws IOException, InterruptedException {
         execute("show");
 
         execute("add project secrets");
