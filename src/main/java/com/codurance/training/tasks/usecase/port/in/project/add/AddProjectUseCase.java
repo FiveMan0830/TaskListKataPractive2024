@@ -1,6 +1,7 @@
-package com.codurance.training.tasks.usecase.port.in;
+package com.codurance.training.tasks.usecase.port.in.project.add;
 
 import com.codurance.training.tasks.entity.Project;
+import com.codurance.training.tasks.entity.ProjectName;
 import com.codurance.training.tasks.usecase.port.out.ProjectRepository;
 
 public class AddProjectUseCase {
@@ -11,6 +12,8 @@ public class AddProjectUseCase {
     }
 
     public void execute(String name) {
-        projectRepository.save(new Project(name));
+        Project project = new Project(new ProjectName(name));
+
+        projectRepository.save(project);
     }
 }

@@ -1,13 +1,11 @@
-package com.codurance.training.tasks.adapter.out;
+package com.codurance.training.tasks.adapter.port.out;
 
 import com.codurance.training.tasks.entity.Project;
 import com.codurance.training.tasks.entity.Task;
+import com.codurance.training.tasks.entity.TaskId;
 import com.codurance.training.tasks.usecase.port.out.ProjectRepository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class InMemoryProjectRepository implements ProjectRepository {
     List<Project> projectList = new ArrayList<>();
@@ -35,12 +33,12 @@ public class InMemoryProjectRepository implements ProjectRepository {
 
     @Override
     public Optional<Task> find(int id){
-        return getAllTasks().stream().filter(task -> task.getId() == id).findFirst();
+        return getAllTasks().stream().filter(task -> Objects.equals(task.getId(), TaskId.of(id))).findFirst();
     }
 
     @Override
     public Optional<Project> find(String projectName) {
-        return projectList.stream().filter(project -> project.getProjectName().equals(projectName)).findFirst();
+        return projectList.stream().filter(project -> project.getProjectName().getName().equals(projectName)).findFirst();
     }
 
     @Override

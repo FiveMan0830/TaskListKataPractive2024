@@ -1,9 +1,16 @@
-package com.codurance.training.tasks.adapter.in;
+package com.codurance.training.tasks.adapter.port.in;
 
 import com.codurance.training.tasks.entity.Command;
 import com.codurance.training.tasks.entity.Project;
 import com.codurance.training.tasks.entity.Task;
-import com.codurance.training.tasks.usecase.port.in.*;
+import com.codurance.training.tasks.entity.TaskStatus;
+import com.codurance.training.tasks.usecase.ProjectNotFoundException;
+import com.codurance.training.tasks.usecase.TaskNotFoundException;
+import com.codurance.training.tasks.usecase.port.in.project.add.AddProjectUseCase;
+import com.codurance.training.tasks.usecase.port.in.project.show.FindAllProjectUseCase;
+import com.codurance.training.tasks.usecase.port.in.task.add.AddTaskUseCase;
+import com.codurance.training.tasks.usecase.port.in.task.check.CheckTaskUseCase;
+import com.codurance.training.tasks.usecase.port.in.task.check.UncheckTaskUseCase;
 import com.codurance.training.tasks.usecase.port.out.ProjectRepository;
 
 import java.io.BufferedReader;
@@ -16,7 +23,7 @@ public class TaskCommandController implements Runnable {
     private final AddProjectUseCase addProjectUseCase;
     private final AddTaskUseCase addTaskUseCase;
     private final CheckTaskUseCase checkTaskUseCase;
-    private final ShowTaskUseCase showTaskUseCase;
+    private final FindAllProjectUseCase findAllProjectUseCase;
     private final UncheckTaskUseCase uncheckTaskUseCase;
     private final BufferedReader in;
     private final PrintWriter out;
@@ -25,7 +32,7 @@ public class TaskCommandController implements Runnable {
     public TaskCommandController(ProjectRepository projectRepository, BufferedReader in, PrintWriter out) {
         addProjectUseCase = new AddProjectUseCase(projectRepository);
         addTaskUseCase = new AddTaskUseCase(projectRepository);
-        showTaskUseCase = new ShowTaskUseCase(projectRepository);
+        findAllProjectUseCase = new FindAllProjectUseCase(projectRepository);
         checkTaskUseCase = new CheckTaskUseCase(projectRepository);
         uncheckTaskUseCase = new UncheckTaskUseCase(projectRepository);
         this.in = in;
@@ -49,49 +56,45 @@ public class TaskCommandController implements Runnable {
         }
     }
 
-    private void add(Command command) {
+    private void add(Command command){
         String[] subcommandRest = command.split(" ", 2);
         String subcommand = subcommandRest[0];
         if (subcommand.equals("project")) {
             addProjectUseCase.execute(subcommandRest[1]);
         } else if (subcommand.equals("task")) {
-            String[] projectTask = subcommandRest[1].split(" ", 2);
-            addTaskUseCase.execute(projectTask[0], projectTask[1], getLastId());
+            try {
+                String[] projectTask = subcommandRest[1].split(" ", 2);
+                addTaskUseCase.execute(projectTask[0], projectTask[1], getLastId());
+            } catch (ProjectNotFoundException e) {
+                out.println(e.getMessage());
+            }
         }
     }
-//
-//    private void addTask(String project, String description) {
-//        List<Task> projectTasks = taskListRunner.getTasks().get(project);
-//        if (projectTasks == null) {
-//            taskListRunner.getOut().printf("Could not find a project with the name \"%s\".", project);
-//            taskListRunner.getOut().println();
-//            return;
-//        }
-//        projectTasks.add(new Task(taskListRunner.getLastId(), description, false));
-//    }
-
-//    public void setDone(String idString, boolean done) {
-//        int id = Integer.parseInt(idString);
-//        for (Map.Entry<String, List<Task>> project : taskListRunner.getTasks().entrySet()) {
-//            for (Task task : project.getValue()) {
-//                if (task.getId() == id) {
-//                    task.setDone(done);
-//                    return;
-//                }
-//            }
-//        }
-//        taskListRunner.getOut().printf("Could not find a task with an ID of %d.", id);
-//        taskListRunner.getOut().println();
-//    }
 
     private void show() {
-        List<Project> projectList = showTaskUseCase.execute();
+        List<Project> projectList = findAllProjectUseCase.execute();
         for (Project project : projectList) {
-            out.println(project.getProjectName());
+            out.println(project.getProjectName().getName());
             for (Task task : project.getProjectTasks()) {
-                out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription());
+                out.printf("    [%c] %d: %s%n", (task.getStatus().equals(TaskStatus.Checked) ? 'x' : ' '), task.getId().getId(), task.getDescription().getDescription());
             }
             out.println();
+        }
+    }
+
+    private void check(String command) {
+        try {
+            checkTaskUseCase.execute(command);
+        } catch (TaskNotFoundException e) {
+            out.println(e.getMessage());
+        }
+    }
+
+    private void uncheck(String command) {
+        try {
+            uncheckTaskUseCase.execute(command);
+        } catch (TaskNotFoundException e) {
+            out.println(e.getMessage());
         }
     }
 
@@ -125,10 +128,10 @@ public class TaskCommandController implements Runnable {
                 add(Command.of(commandRest[1]));
                 break;
             case "check":
-                checkTaskUseCase.execute(commandRest[1]);
+                check(commandRest[1]);
                 break;
             case "uncheck":
-                uncheckTaskUseCase.execute(commandRest[1]);
+                uncheck(commandRest[1]);
                 break;
             case "help":
                 help();

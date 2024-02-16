@@ -1,34 +1,35 @@
 package com.codurance.training.tasks.entity;
 
 public final class Task implements Comparable<Task> {
-    private final long id;
-    private final String description;
-    private boolean done;
+    private final TaskId id;
+    private final TaskDescription description;
+    private TaskStatus status;
 
-    public Task(long id, String description, boolean done) {
+    public Task(TaskId id, TaskDescription description, TaskStatus done) {
         this.id = id;
         this.description = description;
-        this.done = done;
+        this.status = done;
     }
 
-    public long getId() {
+    public TaskId getId() {
         return id;
     }
 
-    public String getDescription() {
+    public TaskDescription getDescription() {
         return description;
     }
 
-    public boolean isDone() {
-        return done;
+    public TaskStatus getStatus() {
+        return status;
     }
 
-    public void setDone(boolean done) {
-        this.done = done;
+    public void setStatus(TaskStatus status) {
+        this.status = status;
     }
+
 
     @Override
     public int compareTo(Task o) {
-        return Long.compare(id, o.getId());
+        return Long.compare(id.getId(), o.getId().getId());
     }
 }

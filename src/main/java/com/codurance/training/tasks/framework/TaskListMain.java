@@ -1,7 +1,7 @@
 package com.codurance.training.tasks.framework;
 
-import com.codurance.training.tasks.adapter.in.TaskCommandController;
-import com.codurance.training.tasks.adapter.out.InMemoryProjectRepository;
+import com.codurance.training.tasks.adapter.port.in.TaskCommandController;
+import com.codurance.training.tasks.adapter.port.out.InMemoryProjectRepository;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

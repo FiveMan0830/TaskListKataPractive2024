@@ -7,8 +7,8 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintWriter;
 
-import com.codurance.training.tasks.adapter.in.TaskCommandController;
-import com.codurance.training.tasks.adapter.out.InMemoryProjectRepository;
+import com.codurance.training.tasks.adapter.port.in.TaskCommandController;
+import com.codurance.training.tasks.adapter.port.out.InMemoryProjectRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
