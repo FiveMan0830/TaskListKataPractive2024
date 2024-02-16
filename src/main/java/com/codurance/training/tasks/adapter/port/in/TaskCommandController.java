@@ -1,6 +1,5 @@
 package com.codurance.training.tasks.adapter.port.in;
 
-import com.codurance.training.tasks.entity.Command;
 import com.codurance.training.tasks.entity.Project;
 import com.codurance.training.tasks.entity.Task;
 import com.codurance.training.tasks.entity.TaskStatus;
@@ -56,7 +55,7 @@ public class TaskCommandController implements Runnable {
         }
     }
 
-    private void add(Command command){
+    private void add(String command){
         String[] subcommandRest = command.split(" ", 2);
         String subcommand = subcommandRest[0];
         if (subcommand.equals("project")) {
@@ -98,8 +97,8 @@ public class TaskCommandController implements Runnable {
         }
     }
 
-    private void error(Command command) {
-        out.printf("I don't know what the command \"%s\" is.", command.getCommand());
+    private void error(String command) {
+        out.printf("I don't know what the command \"%s\" is.", command);
         out.println();
     }
 
@@ -125,7 +124,7 @@ public class TaskCommandController implements Runnable {
                 show();
                 break;
             case "add":
-                add(Command.of(commandRest[1]));
+                add(commandRest[1]);
                 break;
             case "check":
                 check(commandRest[1]);
@@ -137,7 +136,7 @@ public class TaskCommandController implements Runnable {
                 help();
                 break;
             default:
-                error(Command.of(command));
+                error(command);
                 break;
         }
     }
