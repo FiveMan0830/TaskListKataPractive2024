@@ -15,6 +15,7 @@ public class CheckTaskUseCase {
     public CheckTaskUseCase(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
+
     public void execute(String idString) {
         int id = Integer.parseInt(idString);
         if (!projectRepository.find(id).isPresent())
