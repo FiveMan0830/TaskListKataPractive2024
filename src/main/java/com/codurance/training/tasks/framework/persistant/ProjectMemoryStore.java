@@ -1,17 +1,18 @@
 package com.codurance.training.tasks.framework.persistant;
 
 import com.codurance.training.tasks.adapter.port.out.ProjectPO;
+import com.codurance.training.tasks.adapter.port.out.ProjectStore;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ProjectStore {
+public class ProjectMemoryStore implements ProjectStore {
     private final Map<String, List<Long>> projectStorage;
 
 
-    public ProjectStore(Map<String, List<Long>> projectStorage) {
+    public ProjectMemoryStore(Map<String, List<Long>> projectStorage) {
         this.projectStorage = projectStorage;
     }
 

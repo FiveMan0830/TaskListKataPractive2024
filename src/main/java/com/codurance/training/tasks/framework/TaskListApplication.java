@@ -2,7 +2,7 @@ package com.codurance.training.tasks.framework;
 
 import com.codurance.training.tasks.adapter.port.QuitApplicationException;
 import com.codurance.training.tasks.adapter.port.in.TaskCommandController;
-import com.codurance.training.tasks.adapter.port.out.TaskListInput;
+import com.codurance.training.tasks.adapter.port.in.TaskListInput;
 import com.codurance.training.tasks.adapter.port.out.TaskListOutput;
 
 public class TaskListApplication implements Runnable {

@@ -1,6 +1,6 @@
 package com.codurance.training.tasks.framework.io;
 
-import com.codurance.training.tasks.adapter.port.out.TaskListInput;
+import com.codurance.training.tasks.adapter.port.in.TaskListInput;
 
 import java.io.BufferedReader;
 import java.io.IOException;

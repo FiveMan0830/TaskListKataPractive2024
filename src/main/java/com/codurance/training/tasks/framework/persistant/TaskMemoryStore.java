@@ -1,26 +1,20 @@
 package com.codurance.training.tasks.framework.persistant;
 
 import com.codurance.training.tasks.adapter.port.out.TaskPO;
+import com.codurance.training.tasks.adapter.port.out.TaskStore;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class TaskStore {
+public class TaskMemoryStore implements TaskStore {
     private final Map<Long, TaskEntry> taskStorage;
 
-    public TaskStore(Map<Long, TaskEntry> taskStorage) {
+    public TaskMemoryStore(Map<Long, TaskEntry> taskStorage) {
         this.taskStorage = taskStorage;
     }
 
     public void save(TaskPO taskPO) {
         taskStorage.put(taskPO.getId(), new TaskEntry(taskPO.getDescription(), taskPO.isCheck()));
-    }
-
-    public void save(List<TaskPO> taskPOs) {
-        for(TaskPO task : taskPOs) {
-            save(task);
-        }
     }
 
     public Optional<TaskPO> find(long id){

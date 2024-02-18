@@ -2,12 +2,12 @@ package com.codurance.training.tasks.framework;
 
 import com.codurance.training.tasks.adapter.port.in.TaskCommandController;
 import com.codurance.training.tasks.adapter.port.out.InMemoryProjectRepository;
-import com.codurance.training.tasks.adapter.port.out.TaskListInput;
+import com.codurance.training.tasks.adapter.port.in.TaskListInput;
 import com.codurance.training.tasks.adapter.port.out.TaskListOutput;
 import com.codurance.training.tasks.framework.io.TaskListCommandPrinter;
 import com.codurance.training.tasks.framework.io.TaskListCommandReader;
-import com.codurance.training.tasks.framework.persistant.ProjectStore;
-import com.codurance.training.tasks.framework.persistant.TaskStore;
+import com.codurance.training.tasks.framework.persistant.ProjectMemoryStore;
+import com.codurance.training.tasks.framework.persistant.TaskMemoryStore;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,8 +22,8 @@ public class TaskListMain {
         TaskListOutput taskListOutput = new TaskListCommandPrinter(out);
         TaskListInput taskListInput = new TaskListCommandReader(in);
         InMemoryProjectRepository repository = new InMemoryProjectRepository(
-                new ProjectStore(new HashMap<>()),
-                new TaskStore(new HashMap<>())
+                new ProjectMemoryStore(new HashMap<>()),
+                new TaskMemoryStore(new HashMap<>())
         );
         TaskCommandController controller = new TaskCommandController(repository);
 

@@ -1,7 +1,6 @@
 package com.codurance.training.tasks.adapter.port.in;
 
 import com.codurance.training.tasks.adapter.port.QuitApplicationException;
-import com.codurance.training.tasks.adapter.port.out.TaskListOutput;
 import com.codurance.training.tasks.usecase.ProjectNotFoundException;
 import com.codurance.training.tasks.usecase.TaskNotFoundException;
 import com.codurance.training.tasks.usecase.port.in.project.add.AddProjectUseCase;
@@ -12,7 +11,6 @@ import com.codurance.training.tasks.usecase.port.out.ProjectData;
 import com.codurance.training.tasks.usecase.port.out.TaskData;
 import com.codurance.training.tasks.usecase.port.out.repository.ProjectRepository;
 
-import java.io.BufferedReader;
 import java.util.List;
 
 import static java.lang.String.format;

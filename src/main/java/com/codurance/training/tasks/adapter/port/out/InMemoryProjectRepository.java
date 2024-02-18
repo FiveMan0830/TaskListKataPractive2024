@@ -1,7 +1,5 @@
 package com.codurance.training.tasks.adapter.port.out;
 
-import com.codurance.training.tasks.framework.persistant.ProjectStore;
-import com.codurance.training.tasks.framework.persistant.TaskStore;
 import com.codurance.training.tasks.usecase.port.out.*;
 import com.codurance.training.tasks.usecase.port.out.repository.ProjectRepository;
 
@@ -22,10 +20,13 @@ public class InMemoryProjectRepository implements ProjectRepository {
                 data.getProjectName().value(),
                 data.getProjectTasks().stream().map(taskData -> taskData.getId().value()).collect(Collectors.toList())
         ));
-        taskStore.save(data.getProjectTasks().stream().map(task -> new TaskPO(
-                task.getId().value(),
-                task.getDescription().value(),
-                task.getStatus().equals(TaskStatusData.Checked))).collect(Collectors.toList()));
+
+        for(TaskData taskData: data.getProjectTasks()) {
+            taskStore.save(new TaskPO(
+                    taskData.getId().value(),
+                    taskData.getDescription().value(),
+                    taskData.getStatus().equals(TaskStatusData.Checked)));
+        }
     }
 
     public void save(TaskData task) {
