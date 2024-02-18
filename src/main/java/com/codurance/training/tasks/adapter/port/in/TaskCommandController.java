@@ -1,5 +1,7 @@
 package com.codurance.training.tasks.adapter.port.in;
 
+import com.codurance.training.tasks.adapter.port.QuitApplicationException;
+import com.codurance.training.tasks.adapter.port.out.TaskListOutput;
 import com.codurance.training.tasks.usecase.ProjectNotFoundException;
 import com.codurance.training.tasks.usecase.TaskNotFoundException;
 import com.codurance.training.tasks.usecase.port.in.project.add.AddProjectUseCase;
@@ -8,53 +10,32 @@ import com.codurance.training.tasks.usecase.port.in.task.check.CheckTaskUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.uncheck.UncheckTaskUseCase;
 import com.codurance.training.tasks.usecase.port.out.ProjectData;
 import com.codurance.training.tasks.usecase.port.out.TaskData;
-import com.codurance.training.tasks.usecase.port.out.TaskStatusData;
 import com.codurance.training.tasks.usecase.port.out.repository.ProjectRepository;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
-public class TaskCommandController implements Runnable {
+import static java.lang.String.format;
+import static java.lang.System.lineSeparator;
+
+public class TaskCommandController {
     private static final String QUIT = "quit";
     private final AddProjectUseCase addProjectUseCase;
     private final AddTaskUseCase addTaskUseCase;
     private final CheckTaskUseCase checkTaskUseCase;
     private final UncheckTaskUseCase uncheckTaskUseCase;
     private final ProjectRepository projectRepository;
-    private final BufferedReader in;
-    private final PrintWriter out;
 
     private long lastId = 0;
-    public TaskCommandController(ProjectRepository projectRepository, BufferedReader in, PrintWriter out) {
+    public TaskCommandController(ProjectRepository projectRepository) {
         addProjectUseCase = new AddProjectUseCase(projectRepository);
         addTaskUseCase = new AddTaskUseCase(projectRepository);
         checkTaskUseCase = new CheckTaskUseCase(projectRepository);
         uncheckTaskUseCase = new UncheckTaskUseCase(projectRepository);
         this.projectRepository = projectRepository;
-        this.in = in;
-        this.out = out;
     }
 
-    public void run() {
-        while (true) {
-            out.print("> ");
-            out.flush();
-            String command;
-            try {
-                command = in.readLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            if (command.equals(QUIT)) {
-                break;
-            }
-            execute(command);
-        }
-    }
-
-    private void add(String command){
+    private String add(String command){
         String[] subcommandRest = command.split(" ", 2);
         String subcommand = subcommandRest[0];
         if (subcommand.equals("project")) {
@@ -64,80 +45,94 @@ public class TaskCommandController implements Runnable {
                 String[] projectTask = subcommandRest[1].split(" ", 2);
                 addTaskUseCase.execute(projectTask[0], projectTask[1], getLastId());
             } catch (ProjectNotFoundException e) {
-                out.println(e.getMessage());
+                return e.getMessage();
             }
         }
+        return "";
     }
 
-    private void show() {
+    private String show() {
+        StringBuilder sb = new StringBuilder();
         List<ProjectData> projectList = projectRepository.findAll();
         for (ProjectData project : projectList) {
-            out.println(project.getProjectName().value());
+            sb.append(project.toString())
+                    .append(lineSeparator());
             List<TaskData> taskDataList = project.getProjectTasks();
             for (TaskData task : taskDataList) {
-                out.printf("    [%c] %d: %s%n", (task.getStatus().equals(TaskStatusData.Checked) ? 'x' : ' '), task.getId().value(), task.getDescription().value());
+                sb.append(task.toString());
             }
-            out.println();
+            sb.append(lineSeparator());
         }
+        return sb.toString();
     }
 
-    private void check(String command) {
+    private String check(String command) {
         try {
             checkTaskUseCase.execute(command);
         } catch (TaskNotFoundException e) {
-            out.println(e.getMessage());
+            return e.getMessage();
         }
+        return "";
     }
 
-    private void uncheck(String command) {
+    private String uncheck(String command) {
         try {
             uncheckTaskUseCase.execute(command);
         } catch (TaskNotFoundException e) {
-            out.println(e.getMessage());
+            return e.getMessage();
         }
+        return "";
     }
 
-    private void error(String command) {
-        out.printf("I don't know what the command \"%s\" is.", command);
-        out.println();
+    private String error(String command) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(format("I don't know what the command \"%s\" is.", command))
+                .append(lineSeparator())
+                .append(lineSeparator())
+                .append(lineSeparator());
+        return sb.toString();
     }
 
-    private void help() {
-        out.println("Commands:");
-        out.println("  show");
-        out.println("  add project <project name>");
-        out.println("  add task <project name> <task description>");
-        out.println("  check <task ID>");
-        out.println("  uncheck <task ID>");
-        out.println();
+    private String help() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Commands:")
+          .append(lineSeparator())
+          .append("  show")
+          .append(lineSeparator())
+          .append("  add project <project name>")
+          .append(lineSeparator())
+          .append("  add task <project name> <task description>")
+          .append(lineSeparator())
+          .append("  check <task ID>")
+          .append(lineSeparator())
+          .append("  uncheck <task ID>")
+          .append(lineSeparator())
+          .append(lineSeparator());
+        return sb.toString();
     }
 
     private long getLastId() {
         return ++lastId;
     }
 
-    private void execute(String commandLine) {
+    public String execute(String commandLine) {
         String[] commandRest = commandLine.split(" ", 2);
         String command = commandRest[0];
         switch (command) {
             case "show":
-                show();
-                break;
+                return show();
             case "add":
-                add(commandRest[1]);
-                break;
+                return add(commandRest[1]);
             case "check":
-                check(commandRest[1]);
-                break;
+                return check(commandRest[1]);
             case "uncheck":
-                uncheck(commandRest[1]);
-                break;
+                return uncheck(commandRest[1]);
             case "help":
-                help();
-                break;
+                return help();
+            case "quit":
+                throw new QuitApplicationException();
             default:
-                error(command);
-                break;
+                return error(command);
         }
     }
 }

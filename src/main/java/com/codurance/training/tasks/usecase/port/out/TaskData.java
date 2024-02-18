@@ -1,5 +1,7 @@
 package com.codurance.training.tasks.usecase.port.out;
 
+import static java.lang.String.format;
+
 public final class TaskData implements Comparable<TaskData> {
     private final TaskIdData id;
     private final TaskDescriptionData description;
@@ -27,5 +29,10 @@ public final class TaskData implements Comparable<TaskData> {
     @Override
     public int compareTo(TaskData o) {
         return Long.compare(id.value(), o.getId().value());
+    }
+
+    @Override
+    public String toString() {
+        return format("    [%c] %d: %s%n", (status.equals(TaskStatusData.Checked) ? 'x' : ' '), id.value(), description.value());
     }
 }

@@ -1,4 +1,4 @@
-package com.codurance.training.tasks.framework;
+package com.codurance.training.tasks.framework.persistant;
 
 import com.codurance.training.tasks.adapter.port.out.ProjectPO;
 

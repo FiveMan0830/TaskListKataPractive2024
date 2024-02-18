@@ -1,8 +1,8 @@
 package com.codurance.training.tasks.usecase;
 
 import com.codurance.training.tasks.adapter.port.out.InMemoryProjectRepository;
-import com.codurance.training.tasks.framework.ProjectStore;
-import com.codurance.training.tasks.framework.TaskStore;
+import com.codurance.training.tasks.framework.persistant.ProjectStore;
+import com.codurance.training.tasks.framework.persistant.TaskStore;
 import com.codurance.training.tasks.usecase.port.in.project.add.AddProjectUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.check.CheckTaskUseCase;

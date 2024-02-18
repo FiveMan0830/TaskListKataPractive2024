@@ -1,7 +1,7 @@
 package com.codurance.training.tasks.adapter.port.out;
 
-import com.codurance.training.tasks.framework.ProjectStore;
-import com.codurance.training.tasks.framework.TaskStore;
+import com.codurance.training.tasks.framework.persistant.ProjectStore;
+import com.codurance.training.tasks.framework.persistant.TaskStore;
 import com.codurance.training.tasks.usecase.port.out.*;
 import com.codurance.training.tasks.usecase.port.out.repository.ProjectRepository;
 

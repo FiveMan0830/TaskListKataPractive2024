@@ -30,4 +30,9 @@ public class ProjectData {
     public void add(TaskData task) {
         projectTasks.add(task);
     }
+
+    @Override
+    public String toString() {
+        return projectName.value();
+    }
 }

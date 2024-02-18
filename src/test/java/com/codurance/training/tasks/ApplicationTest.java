@@ -10,8 +10,13 @@ import java.util.HashMap;
 
 import com.codurance.training.tasks.adapter.port.in.TaskCommandController;
 import com.codurance.training.tasks.adapter.port.out.InMemoryProjectRepository;
-import com.codurance.training.tasks.framework.ProjectStore;
-import com.codurance.training.tasks.framework.TaskStore;
+import com.codurance.training.tasks.adapter.port.out.TaskListInput;
+import com.codurance.training.tasks.adapter.port.out.TaskListOutput;
+import com.codurance.training.tasks.framework.TaskListApplication;
+import com.codurance.training.tasks.framework.io.TaskListCommandPrinter;
+import com.codurance.training.tasks.framework.io.TaskListCommandReader;
+import com.codurance.training.tasks.framework.persistant.ProjectStore;
+import com.codurance.training.tasks.framework.persistant.TaskStore;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,12 +38,15 @@ public final class ApplicationTest {
     public ApplicationTest() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(new PipedInputStream(inStream)));
         PrintWriter out = new PrintWriter(new PipedOutputStream(outStream), true);
+        TaskListOutput taskListOutput = new TaskListCommandPrinter(out);
+        TaskListInput taskListInput = new TaskListCommandReader(in);
+
         InMemoryProjectRepository repository = new InMemoryProjectRepository(
                 new ProjectStore(new HashMap<>()),
                 new TaskStore(new HashMap<>())
         );
-        TaskCommandController taskCommandController = new TaskCommandController(repository, in, out);
-        applicationThread = new Thread(taskCommandController);
+        TaskListApplication taskListApplication = new TaskListApplication(new TaskCommandController(repository), taskListInput, taskListOutput);
+        applicationThread = new Thread(taskListApplication);
     }
 
     @Before public void
