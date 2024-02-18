@@ -6,7 +6,7 @@ import com.codurance.training.tasks.framework.TaskStore;
 import com.codurance.training.tasks.usecase.port.in.project.add.AddProjectUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.check.CheckTaskUseCase;
-import com.codurance.training.tasks.usecase.port.in.task.check.UncheckTaskUseCase;
+import com.codurance.training.tasks.usecase.port.in.task.uncheck.UncheckTaskUseCase;
 import com.codurance.training.tasks.usecase.port.out.TaskStatusData;
 import com.codurance.training.tasks.usecase.port.out.repository.ProjectRepository;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package com.codurance.training.tasks.usecase.port.in.task.check;
+package com.codurance.training.tasks.usecase.port.in.task.uncheck;
 
 import com.codurance.training.tasks.entity.Task;
 import com.codurance.training.tasks.entity.TaskStatus;

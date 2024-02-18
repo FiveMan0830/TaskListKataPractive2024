@@ -5,7 +5,7 @@ import com.codurance.training.tasks.usecase.TaskNotFoundException;
 import com.codurance.training.tasks.usecase.port.in.project.add.AddProjectUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.check.CheckTaskUseCase;
-import com.codurance.training.tasks.usecase.port.in.task.check.UncheckTaskUseCase;
+import com.codurance.training.tasks.usecase.port.in.task.uncheck.UncheckTaskUseCase;
 import com.codurance.training.tasks.usecase.port.out.ProjectData;
 import com.codurance.training.tasks.usecase.port.out.TaskData;
 import com.codurance.training.tasks.usecase.port.out.TaskStatusData;
