@@ -4,11 +4,13 @@ public class TaskPO {
     private final String id;
     private final String description;
     private final boolean check;
+    private final String dueDate;
 
-    public TaskPO(String id, String description, boolean check) {
+    public TaskPO(String id, String description, boolean check, String dueDate) {
         this.id = id;
         this.description = description;
         this.check = check;
+        this.dueDate = dueDate;
     }
 
     public String getId() {
@@ -21,5 +23,9 @@ public class TaskPO {
 
     public boolean isCheck() {
         return check;
+    }
+
+    public String getDueDate() {
+        return dueDate;
     }
 }

@@ -4,11 +4,13 @@ public final class Task implements Comparable<Task> {
     private final TaskId id;
     private final TaskDescription description;
     private TaskStatus status;
+    private DueDate dueDate;
 
     public Task(TaskId id, TaskDescription description, TaskStatus done) {
         this.id = id;
         this.description = description;
         this.status = done;
+        dueDate = new DueDate("");
     }
 
     public TaskId getId() {
@@ -27,6 +29,17 @@ public final class Task implements Comparable<Task> {
         this.status = status;
     }
 
+    public DueDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(DueDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public boolean hasDueDate() {
+        return dueDate.value().equals("");
+    }
 
     @Override
     public int compareTo(Task o) {

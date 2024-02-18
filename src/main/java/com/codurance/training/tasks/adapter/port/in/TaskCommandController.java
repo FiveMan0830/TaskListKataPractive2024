@@ -1,11 +1,11 @@
 package com.codurance.training.tasks.adapter.port.in;
 
 import com.codurance.training.tasks.adapter.port.QuitApplicationException;
-import com.codurance.training.tasks.usecase.ProjectNotFoundException;
-import com.codurance.training.tasks.usecase.TaskNotFoundException;
+import com.codurance.training.tasks.usecase.UseCaseFailureException;
 import com.codurance.training.tasks.usecase.port.in.project.add.AddProjectUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.add.AddTaskUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.check.CheckTaskUseCase;
+import com.codurance.training.tasks.usecase.port.in.task.due.DueTaskUseCase;
 import com.codurance.training.tasks.usecase.port.in.task.uncheck.UncheckTaskUseCase;
 import com.codurance.training.tasks.usecase.port.out.ProjectData;
 import com.codurance.training.tasks.usecase.port.out.TaskData;
@@ -22,6 +22,7 @@ public class TaskCommandController {
     private final AddTaskUseCase addTaskUseCase;
     private final CheckTaskUseCase checkTaskUseCase;
     private final UncheckTaskUseCase uncheckTaskUseCase;
+    private final DueTaskUseCase dueTaskUseCase;
     private final ProjectRepository projectRepository;
 
     private long lastId = 0;
@@ -30,6 +31,7 @@ public class TaskCommandController {
         addTaskUseCase = new AddTaskUseCase(projectRepository);
         checkTaskUseCase = new CheckTaskUseCase(projectRepository);
         uncheckTaskUseCase = new UncheckTaskUseCase(projectRepository);
+        dueTaskUseCase = new DueTaskUseCase(projectRepository);
         this.projectRepository = projectRepository;
     }
 
@@ -42,7 +44,7 @@ public class TaskCommandController {
             try {
                 String[] projectTask = subcommandRest[1].split(" ", 3);
                 addTaskUseCase.execute(projectTask[0], projectTask[2], projectTask[1]);
-            } catch (ProjectNotFoundException e) {
+            } catch (UseCaseFailureException e) {
                 return e.getMessage();
             }
         }
@@ -67,7 +69,7 @@ public class TaskCommandController {
     private String check(String command) {
         try {
             checkTaskUseCase.execute(command);
-        } catch (TaskNotFoundException e) {
+        } catch (UseCaseFailureException e) {
             return e.getMessage();
         }
         return "";
@@ -76,7 +78,7 @@ public class TaskCommandController {
     private String uncheck(String command) {
         try {
             uncheckTaskUseCase.execute(command);
-        } catch (TaskNotFoundException e) {
+        } catch (UseCaseFailureException e) {
             return e.getMessage();
         }
         return "";
@@ -109,8 +111,14 @@ public class TaskCommandController {
         return sb.toString();
     }
 
-    private long getLastId() {
-        return ++lastId;
+    private String due(String command) {
+        String[] subcommandRest = command.split(" ", 2);
+        try {
+            dueTaskUseCase.execute(subcommandRest[0], subcommandRest[1]);
+        } catch (UseCaseFailureException e) {
+            return e.getMessage();
+        }
+        return "";
     }
 
     public String execute(String commandLine) {
@@ -129,6 +137,8 @@ public class TaskCommandController {
                 return help();
             case "quit":
                 throw new QuitApplicationException();
+            case "deadline":
+                return due(commandRest[1]);
             default:
                 return error(command);
         }

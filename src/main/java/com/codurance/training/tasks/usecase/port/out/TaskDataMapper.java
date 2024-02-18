@@ -12,7 +12,7 @@ public class TaskDataMapper {
         return new TaskData(
                 TaskIdData.of(task.getId().value()),
                 TaskDescriptionData.of(task.getDescription().value()),
-                TaskStatusDataMapper.toData(task.getStatus())
+                DueDateData.of(task.getDueDate().value()), TaskStatusDataMapper.toData(task.getStatus())
         );
     }
 

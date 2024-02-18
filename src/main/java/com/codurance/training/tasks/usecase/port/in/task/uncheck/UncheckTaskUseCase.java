@@ -2,7 +2,7 @@ package com.codurance.training.tasks.usecase.port.in.task.uncheck;
 
 import com.codurance.training.tasks.entity.Task;
 import com.codurance.training.tasks.entity.TaskStatus;
-import com.codurance.training.tasks.usecase.TaskNotFoundException;
+import com.codurance.training.tasks.usecase.UseCaseFailureException;
 import com.codurance.training.tasks.usecase.port.out.TaskDataMapper;
 import com.codurance.training.tasks.usecase.port.out.repository.ProjectRepository;
 
@@ -18,7 +18,7 @@ public class UncheckTaskUseCase {
 
     public void execute(String idString) {
         if (!projectRepository.findTask(idString).isPresent())
-            throw new TaskNotFoundException(format(TaskNotFoundException.TASK_NOT_FOUND, idString));
+            throw new UseCaseFailureException(format(UseCaseFailureException.TASK_NOT_FOUND, idString));
 
         Task task = TaskDataMapper.toDomain(projectRepository.findTask(idString).get());
         task.setStatus(TaskStatus.Unchecked);

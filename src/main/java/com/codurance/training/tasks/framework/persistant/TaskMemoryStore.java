@@ -14,22 +14,36 @@ public class TaskMemoryStore implements TaskStore {
     }
 
     public void save(TaskPO taskPO) {
-        taskStorage.put(taskPO.getId(), new TaskEntry(taskPO.getDescription(), taskPO.isCheck()));
+        taskStorage.put(taskPO.getId(), new TaskEntry(taskPO.getDescription(), taskPO.isCheck(), taskPO.getDueDate()));
     }
 
     public Optional<TaskPO> find(String id){
         if(!taskStorage.containsKey(id)) return Optional.empty();
         TaskEntry entry = taskStorage.get(id);
-        return Optional.of(new TaskPO(id, entry.description, entry.check));
+        return Optional.of(new TaskPO(id, entry.getDescription(), entry.isCheck(), entry.getDueDate()));
     }
 
     private class TaskEntry {
-        public String description;
-        public boolean check;
+        private final String description;
+        private final boolean check;
+        private final String dueDate;
 
-        public TaskEntry(String description, boolean check) {
+        public TaskEntry(String description, boolean check, String dueDate) {
             this.description = description;
             this.check = check;
+            this.dueDate = dueDate;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public boolean isCheck() {
+            return check;
+        }
+
+        public String getDueDate() {
+            return dueDate;
         }
     }
 }

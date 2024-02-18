@@ -25,7 +25,7 @@ public class InMemoryProjectRepository implements ProjectRepository {
             taskStore.save(new TaskPO(
                     taskData.getId().value(),
                     taskData.getDescription().value(),
-                    taskData.getStatus().equals(TaskStatusData.Checked)));
+                    taskData.getStatus().equals(TaskStatusData.Checked), taskData.getDueDate().value()));
         }
     }
 
@@ -33,8 +33,8 @@ public class InMemoryProjectRepository implements ProjectRepository {
         taskStore.save(new TaskPO(
                 task.getId().value(),
                 task.getDescription().value(),
-                task.getStatus().equals(TaskStatusData.Checked)
-        ));
+                task.getStatus().equals(TaskStatusData.Checked),
+                task.getDueDate().value()));
     }
 
     public Optional<TaskData> findTask(String id){
@@ -44,7 +44,7 @@ public class InMemoryProjectRepository implements ProjectRepository {
         return Optional.of(new TaskData(
                 TaskIdData.of(task.getId()),
                 TaskDescriptionData.of(task.getDescription()),
-                task.isCheck() ? TaskStatusData.Checked : TaskStatusData.Unchecked
+                DueDateData.of(task.getDueDate()), task.isCheck() ? TaskStatusData.Checked : TaskStatusData.Unchecked
         ));
     }
 
