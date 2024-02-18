@@ -1,15 +1,19 @@
 package com.codurance.training.tasks.usecase.port.out;
 
+import com.codurance.training.tasks.entity.ProjectName;
+
 import static java.lang.String.format;
 
 public final class TaskData implements Comparable<TaskData> {
     private final TaskIdData id;
-    private final TaskDescriptionData description;
+    private final ProjectNameData project;
     private final DueDateData dueDate;
+    private final TaskDescriptionData description;
     private TaskStatusData status;
 
-    public TaskData(TaskIdData id, TaskDescriptionData description, DueDateData dueDate, TaskStatusData done) {
+    public TaskData(TaskIdData id, ProjectNameData project, TaskDescriptionData description, DueDateData dueDate, TaskStatusData done) {
         this.id = id;
+        this.project = project;
         this.description = description;
         this.dueDate = dueDate;
         this.status = done;
@@ -17,6 +21,10 @@ public final class TaskData implements Comparable<TaskData> {
 
     public TaskIdData getId() {
         return id;
+    }
+
+    public ProjectNameData getProject() {
+        return project;
     }
 
     public TaskDescriptionData getDescription() {

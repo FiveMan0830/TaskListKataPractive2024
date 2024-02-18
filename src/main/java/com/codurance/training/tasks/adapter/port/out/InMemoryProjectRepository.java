@@ -22,16 +22,14 @@ public class InMemoryProjectRepository implements ProjectRepository {
         ));
 
         for(TaskData taskData: data.getProjectTasks()) {
-            taskStore.save(new TaskPO(
-                    taskData.getId().value(),
-                    taskData.getDescription().value(),
-                    taskData.getStatus().equals(TaskStatusData.Checked), taskData.getDueDate().value()));
+            save(taskData);
         }
     }
 
     public void save(TaskData task) {
         taskStore.save(new TaskPO(
                 task.getId().value(),
+                task.getProject().value(),
                 task.getDescription().value(),
                 task.getStatus().equals(TaskStatusData.Checked),
                 task.getDueDate().value()));
@@ -43,8 +41,10 @@ public class InMemoryProjectRepository implements ProjectRepository {
         TaskPO task = taskPO.get();
         return Optional.of(new TaskData(
                 TaskIdData.of(task.getId()),
+                ProjectNameData.of(task.getProjectName()),
                 TaskDescriptionData.of(task.getDescription()),
-                DueDateData.of(task.getDueDate()), task.isCheck() ? TaskStatusData.Checked : TaskStatusData.Unchecked
+                DueDateData.of(task.getDueDate()),
+                task.isCheck() ? TaskStatusData.Checked : TaskStatusData.Unchecked
         ));
     }
 
@@ -69,6 +69,20 @@ public class InMemoryProjectRepository implements ProjectRepository {
         }
         return result;
     }
+
+    public void delete(TaskIdData taskId) {
+        taskStore.delete(taskId.value());
+        List<ProjectPO> projects = projectStore.findAll();
+        for(ProjectPO project : projects) {
+            if(project.getTaskIdList().contains(taskId.value())){
+                projectStore.save(new ProjectPO(
+                        project.getName(),
+                        project.getTaskIdList().stream().filter(id -> !id.equals(taskId.value())).collect(Collectors.toList())
+                ));
+            }
+        }
+    }
+
 
     private Set<TaskData> getTasks(List<String> ids) {
         Set<TaskData> projectTasks = new HashSet<>();

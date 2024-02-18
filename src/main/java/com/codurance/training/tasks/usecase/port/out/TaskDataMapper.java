@@ -11,6 +11,7 @@ public class TaskDataMapper {
     public static TaskData toData(Task task) {
         return new TaskData(
                 TaskIdData.of(task.getId().value()),
+                ProjectNameDataMapper.toData(task.getProject()),
                 TaskDescriptionData.of(task.getDescription().value()),
                 DueDateData.of(task.getDueDate().value()), TaskStatusDataMapper.toData(task.getStatus())
         );
@@ -19,6 +20,7 @@ public class TaskDataMapper {
     public static Task toDomain(TaskData data) {
         return new Task(
                 TaskId.of(data.getId().value()),
+                ProjectNameDataMapper.toDomain(data.getProject()),
                 TaskDescription.of(data.getDescription().value()),
                 TaskStatusDataMapper.toDomain(data.getStatus())
         );

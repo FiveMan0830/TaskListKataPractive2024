@@ -27,7 +27,7 @@ public class AddTaskUseCase {
 
         Task task = new Task(
                 new TaskId(id),
-                new TaskDescription(description),
+                project.getProjectName(), new TaskDescription(description),
                 TaskStatus.Unchecked
         );
         project.add(task);

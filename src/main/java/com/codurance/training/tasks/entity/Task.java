@@ -2,12 +2,14 @@ package com.codurance.training.tasks.entity;
 
 public final class Task implements Comparable<Task> {
     private final TaskId id;
+    private final ProjectName project;
     private final TaskDescription description;
     private TaskStatus status;
     private DueDate dueDate;
 
-    public Task(TaskId id, TaskDescription description, TaskStatus done) {
+    public Task(TaskId id, ProjectName project, TaskDescription description, TaskStatus done) {
         this.id = id;
+        this.project = project;
         this.description = description;
         this.status = done;
         dueDate = new DueDate("");
@@ -15,6 +17,10 @@ public final class Task implements Comparable<Task> {
 
     public TaskId getId() {
         return id;
+    }
+
+    public ProjectName getProject() {
+        return project;
     }
 
     public TaskDescription getDescription() {
