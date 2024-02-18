@@ -30,6 +30,6 @@ public final class Task implements Comparable<Task> {
 
     @Override
     public int compareTo(Task o) {
-        return Long.compare(id.value(), o.getId().value());
+        return id.value().compareTo(o.getId().value());
     }
 }

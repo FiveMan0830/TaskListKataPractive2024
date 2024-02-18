@@ -17,11 +17,10 @@ public class UncheckTaskUseCase {
     }
 
     public void execute(String idString) {
-        int id = Integer.parseInt(idString);
-        if (!projectRepository.find(id).isPresent())
-            throw new TaskNotFoundException(format(TaskNotFoundException.TASK_NOT_FOUND, id));
+        if (!projectRepository.findTask(idString).isPresent())
+            throw new TaskNotFoundException(format(TaskNotFoundException.TASK_NOT_FOUND, idString));
 
-        Task task = TaskDataMapper.toDomain(projectRepository.find(id).get());
+        Task task = TaskDataMapper.toDomain(projectRepository.findTask(idString).get());
         task.setStatus(TaskStatus.Unchecked);
 
         projectRepository.save(TaskDataMapper.toData(task));

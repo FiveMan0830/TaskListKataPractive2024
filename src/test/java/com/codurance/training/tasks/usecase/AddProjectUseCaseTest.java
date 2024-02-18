@@ -31,6 +31,6 @@ public class AddProjectUseCaseTest {
         addProjectUseCase.execute("test");
 
         assertEquals(1, repository.findAll().size());
-        assertTrue(repository.find("test").isPresent());
+        assertTrue(repository.findProject("test").isPresent());
     }
 }

@@ -35,14 +35,14 @@ public class UncheckTaskUseCaseTest {
         AddTaskUseCase addTaskUseCase = new AddTaskUseCase(repository);
         addTaskUseCase.execute("test", "First task", 1);
         CheckTaskUseCase checkTaskUseCase = new CheckTaskUseCase(repository);
-        checkTaskUseCase.execute(String.valueOf(1));
-        assertTrue(repository.find(1).isPresent());
-        assertEquals(TaskStatusData.Checked, repository.find(1).get().getStatus());
+        checkTaskUseCase.execute("1");
+        assertTrue(repository.findTask("1").isPresent());
+        assertEquals(TaskStatusData.Checked, repository.findTask("1").get().getStatus());
 
         UncheckTaskUseCase uncheckTaskUseCase = new UncheckTaskUseCase(repository);
-        uncheckTaskUseCase.execute(String.valueOf(1));
+        uncheckTaskUseCase.execute("1");
 
-        assertTrue(repository.find(1).isPresent());
-        assertEquals(TaskStatusData.Unchecked, repository.find(1).get().getStatus());
+        assertTrue(repository.findTask("1").isPresent());
+        assertEquals(TaskStatusData.Unchecked, repository.findTask("1").get().getStatus());
     }
 }

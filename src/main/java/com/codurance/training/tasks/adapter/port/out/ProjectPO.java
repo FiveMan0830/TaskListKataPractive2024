@@ -4,9 +4,9 @@ import java.util.List;
 
 public class ProjectPO {
     private final String name;
-    private final List<Long> taskIdList;
+    private final List<String> taskIdList;
 
-    public ProjectPO(String name, List<Long> taskIdList) {
+    public ProjectPO(String name, List<String> taskIdList) {
         this.name = name;
         this.taskIdList = taskIdList;
     }
@@ -15,7 +15,7 @@ public class ProjectPO {
         return name;
     }
 
-    public List<Long> getTaskIdList() {
+    public List<String> getTaskIdList() {
         return taskIdList;
     }
 }

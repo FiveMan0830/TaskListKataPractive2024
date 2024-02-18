@@ -33,8 +33,8 @@ public class AddTaskUseCaseTest {
         AddTaskUseCase addTaskUseCase = new AddTaskUseCase(repository);
         addTaskUseCase.execute("test", "First task", 1);
 
-        assertTrue(repository.find(1).isPresent());
-        assertEquals( "First task", repository.find(1).get().getDescription().value());
-        assertEquals(1, repository.find("test").get().getProjectTasks().size());
+        assertTrue(repository.findTask("1").isPresent());
+        assertEquals( "First task", repository.findTask("1").get().getDescription().value());
+        assertEquals(1, repository.findProject("test").get().getProjectTasks().size());
     }
 }

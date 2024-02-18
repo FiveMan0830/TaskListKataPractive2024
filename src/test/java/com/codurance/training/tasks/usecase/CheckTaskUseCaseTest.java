@@ -37,7 +37,7 @@ public class CheckTaskUseCaseTest {
         CheckTaskUseCase checkTaskUseCase = new CheckTaskUseCase(repository);
         checkTaskUseCase.execute(String.valueOf(1));
 
-        assertTrue(repository.find(1).isPresent());
-        assertEquals( TaskStatusData.Checked, repository.find(1).get().getStatus());
+        assertTrue(repository.findTask("1").isPresent());
+        assertEquals( TaskStatusData.Checked, repository.findTask("1").get().getStatus());
     }
 }

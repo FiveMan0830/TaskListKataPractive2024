@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ProjectRepository {
     void save(ProjectData project);
     void save(TaskData task);
-    Optional<ProjectData> find(String projectName);
-    Optional<TaskData> find(int id);
+    Optional<ProjectData> findProject(String projectName);
+    Optional<TaskData> findTask(String id);
     List<ProjectData> findAll();
 }

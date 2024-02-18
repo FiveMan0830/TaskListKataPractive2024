@@ -28,11 +28,11 @@ public final class TaskData implements Comparable<TaskData> {
 
     @Override
     public int compareTo(TaskData o) {
-        return Long.compare(id.value(), o.getId().value());
+        return id.value().compareTo(o.getId().value());
     }
 
     @Override
     public String toString() {
-        return format("    [%c] %d: %s%n", (status.equals(TaskStatusData.Checked) ? 'x' : ' '), id.value(), description.value());
+        return format("    [%c] %s: %s%n", (status.equals(TaskStatusData.Checked) ? 'x' : ' '), id.value(), description.value());
     }
 }

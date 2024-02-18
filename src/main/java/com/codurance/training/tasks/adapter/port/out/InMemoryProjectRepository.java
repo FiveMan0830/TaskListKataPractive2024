@@ -37,7 +37,7 @@ public class InMemoryProjectRepository implements ProjectRepository {
         ));
     }
 
-    public Optional<TaskData> find(int id){
+    public Optional<TaskData> findTask(String id){
         Optional<TaskPO> taskPO = taskStore.find(id);
         if(!taskPO.isPresent()) return Optional.empty();
         TaskPO task = taskPO.get();
@@ -48,7 +48,7 @@ public class InMemoryProjectRepository implements ProjectRepository {
         ));
     }
 
-    public Optional<ProjectData> find(String projectName) {
+    public Optional<ProjectData> findProject(String projectName) {
         Optional<ProjectPO> projectPO = projectStore.find(projectName);
         if(!projectPO.isPresent()) return Optional.empty();
         ProjectPO project = projectPO.get();
@@ -70,11 +70,11 @@ public class InMemoryProjectRepository implements ProjectRepository {
         return result;
     }
 
-    private Set<TaskData> getTasks(List<Long> ids) {
+    private Set<TaskData> getTasks(List<String> ids) {
         Set<TaskData> projectTasks = new HashSet<>();
 
-        for(Long id : ids) {
-            find(id.intValue()).ifPresent(projectTasks::add);
+        for(String id : ids) {
+            findTask(id).ifPresent(projectTasks::add);
         }
 
         return projectTasks;

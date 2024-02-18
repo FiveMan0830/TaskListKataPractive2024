@@ -9,10 +9,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProjectMemoryStore implements ProjectStore {
-    private final Map<String, List<Long>> projectStorage;
+    private final Map<String, List<String>> projectStorage;
 
 
-    public ProjectMemoryStore(Map<String, List<Long>> projectStorage) {
+    public ProjectMemoryStore(Map<String, List<String>> projectStorage) {
         this.projectStorage = projectStorage;
     }
 

@@ -1,21 +1,17 @@
 package com.codurance.training.tasks.entity;
 
 public class TaskId {
-    private final long id;
+    private final String id;
 
-    public TaskId(long id) {
+    public TaskId(String id) {
         this.id = id;
     }
 
-    public long value() {
+    public String value() {
         return id;
     }
 
-    public static TaskId of(int id) {
-        return new TaskId(id);
-    }
-
-    public static TaskId of(long id) {
+    public static TaskId of(String id) {
         return new TaskId(id);
     }
 
@@ -24,6 +20,6 @@ public class TaskId {
         if(o == this) return true;
         if(!(o instanceof TaskId)) return false;
         TaskId t = (TaskId) o;
-        return id == t.value();
+        return id.equals(t.value());
     }
 }

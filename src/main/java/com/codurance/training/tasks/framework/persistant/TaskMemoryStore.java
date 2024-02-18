@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public class TaskMemoryStore implements TaskStore {
-    private final Map<Long, TaskEntry> taskStorage;
+    private final Map<String, TaskEntry> taskStorage;
 
-    public TaskMemoryStore(Map<Long, TaskEntry> taskStorage) {
+    public TaskMemoryStore(Map<String, TaskEntry> taskStorage) {
         this.taskStorage = taskStorage;
     }
 
@@ -17,7 +17,7 @@ public class TaskMemoryStore implements TaskStore {
         taskStorage.put(taskPO.getId(), new TaskEntry(taskPO.getDescription(), taskPO.isCheck()));
     }
 
-    public Optional<TaskPO> find(long id){
+    public Optional<TaskPO> find(String id){
         if(!taskStorage.containsKey(id)) return Optional.empty();
         TaskEntry entry = taskStorage.get(id);
         return Optional.of(new TaskPO(id, entry.description, entry.check));

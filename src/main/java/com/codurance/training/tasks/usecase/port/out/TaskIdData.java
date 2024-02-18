@@ -1,21 +1,17 @@
 package com.codurance.training.tasks.usecase.port.out;
 
 public class TaskIdData {
-    private final long id;
+    private final String id;
 
-    public TaskIdData(long id) {
+    public TaskIdData(String id) {
         this.id = id;
     }
 
-    public long value() {
+    public String value() {
         return id;
     }
 
-    public static TaskIdData of(int id) {
-        return new TaskIdData(id);
-    }
-
-    public static TaskIdData of(long id) {
+    public static TaskIdData of(String id) {
         return new TaskIdData(id);
     }
 
@@ -24,6 +20,6 @@ public class TaskIdData {
         if(o == this) return true;
         if(!(o instanceof TaskIdData)) return false;
         TaskIdData t = (TaskIdData) o;
-        return id == t.value();
+        return id.equals(t.value());
     }
 }
