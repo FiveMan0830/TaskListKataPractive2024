@@ -40,8 +40,8 @@ public class TaskCommandController {
             addProjectUseCase.execute(subcommandRest[1]);
         } else if (subcommand.equals("task")) {
             try {
-                String[] projectTask = subcommandRest[1].split(" ", 2);
-                addTaskUseCase.execute(projectTask[0], projectTask[1], getLastId());
+                String[] projectTask = subcommandRest[1].split(" ", 3);
+                addTaskUseCase.execute(projectTask[0], projectTask[2], projectTask[1]);
             } catch (ProjectNotFoundException e) {
                 return e.getMessage();
             }

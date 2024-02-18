@@ -31,7 +31,7 @@ public class AddTaskUseCaseTest {
         addProjectUseCase.execute("test");
 
         AddTaskUseCase addTaskUseCase = new AddTaskUseCase(repository);
-        addTaskUseCase.execute("test", "First task", 1);
+        addTaskUseCase.execute("test", "First task", "1");
 
         assertTrue(repository.findTask("1").isPresent());
         assertEquals( "First task", repository.findTask("1").get().getDescription().value());

@@ -1,7 +1,7 @@
 package com.codurance.training.tasks.usecase;
 
 public class TaskNotFoundException extends RuntimeException {
-    public static final String TASK_NOT_FOUND = "Could not find a task with an ID of %d.";
+    public static final String TASK_NOT_FOUND = "Could not find a task with an ID of %s.";
 
     public TaskNotFoundException() {
     }

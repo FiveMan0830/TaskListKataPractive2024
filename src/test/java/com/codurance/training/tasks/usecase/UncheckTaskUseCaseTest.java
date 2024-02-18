@@ -33,7 +33,7 @@ public class UncheckTaskUseCaseTest {
         AddProjectUseCase addProjectUseCase = new AddProjectUseCase(repository);
         addProjectUseCase.execute("test");
         AddTaskUseCase addTaskUseCase = new AddTaskUseCase(repository);
-        addTaskUseCase.execute("test", "First task", 1);
+        addTaskUseCase.execute("test", "First task", "1");
         CheckTaskUseCase checkTaskUseCase = new CheckTaskUseCase(repository);
         checkTaskUseCase.execute("1");
         assertTrue(repository.findTask("1").isPresent());

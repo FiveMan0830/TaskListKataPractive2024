@@ -32,7 +32,7 @@ public class CheckTaskUseCaseTest {
         AddProjectUseCase addProjectUseCase = new AddProjectUseCase(repository);
         addProjectUseCase.execute("test");
         AddTaskUseCase addTaskUseCase = new AddTaskUseCase(repository);
-        addTaskUseCase.execute("test", "First task", 1);
+        addTaskUseCase.execute("test", "First task", "1");
 
         CheckTaskUseCase checkTaskUseCase = new CheckTaskUseCase(repository);
         checkTaskUseCase.execute(String.valueOf(1));

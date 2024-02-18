@@ -74,43 +74,43 @@ public final class ApplicationTest {
         execute("show");
 
         execute("add project secrets");
-        execute("add task secrets Eat more donuts.");
-        execute("add task secrets Destroy all humans.");
+        execute("add task secrets S01 Eat more donuts.");
+        execute("add task secrets S02 Destroy all humans.");
 
         execute("show");
         readLines(
             "secrets",
-            "    [ ] 1: Eat more donuts.",
-            "    [ ] 2: Destroy all humans.",
+            "    [ ] S01: Eat more donuts.",
+            "    [ ] S02: Destroy all humans.",
             ""
         );
 
         execute("add project training");
-        execute("add task training Four Elements of Simple Design");
-        execute("add task training SOLID");
-        execute("add task training Coupling and Cohesion");
-        execute("add task training Primitive Obsession");
-        execute("add task training Outside-In TDD");
-        execute("add task training Interaction-Driven Design");
+        execute("add task training T01 Four Elements of Simple Design");
+        execute("add task training T02 SOLID");
+        execute("add task training T03 Coupling and Cohesion");
+        execute("add task training T04 Primitive Obsession");
+        execute("add task training T05 Outside-In TDD");
+        execute("add task training T06 Interaction-Driven Design");
 
-        execute("check 1");
-        execute("check 3");
-        execute("check 5");
-        execute("check 6");
+        execute("check S01");
+        execute("check T01");
+        execute("check T03");
+        execute("check T04");
 
         execute("show");
         readLines(
                 "training",
-                "    [x] 3: Four Elements of Simple Design",
-                "    [ ] 4: SOLID",
-                "    [x] 5: Coupling and Cohesion",
-                "    [x] 6: Primitive Obsession",
-                "    [ ] 7: Outside-In TDD",
-                "    [ ] 8: Interaction-Driven Design",
+                "    [x] T01: Four Elements of Simple Design",
+                "    [ ] T02: SOLID",
+                "    [x] T03: Coupling and Cohesion",
+                "    [x] T04: Primitive Obsession",
+                "    [ ] T05: Outside-In TDD",
+                "    [ ] T06: Interaction-Driven Design",
                 "",
                 "secrets",
-                "    [x] 1: Eat more donuts.",
-                "    [ ] 2: Destroy all humans.",
+                "    [x] S01: Eat more donuts.",
+                "    [ ] S02: Destroy all humans.",
                 ""
         );
 
